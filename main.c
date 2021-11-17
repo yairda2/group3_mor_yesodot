@@ -1,3 +1,5 @@
+//we try to change a thing in are gir clone
+
 #define _CRT_SECURE_NO_WARNINGS
 #include "Doctor.h"
 #include <stdio.h>
