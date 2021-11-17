@@ -1,4 +1,4 @@
-//we try to change a thing in are gir clone
+//we try to change a thing in are gir clone//added new note
 
 #define _CRT_SECURE_NO_WARNINGS
 #include "Doctor.h"
