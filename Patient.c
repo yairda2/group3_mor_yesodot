@@ -42,7 +42,7 @@ void printPatient(const Patient* p) {
 /*Registers a patient to patients database file
 storing in text file by the size of patient struct. */
 int registerPatient(const Patient* p) {
-	FILE* fp = fopen("PatientData.txt", "ab");
+	FILE* fp = fopen("PatientData.dat", "ab");
 	if (!fp) {
 		perror("Cannot open file");
 		exit(1);
@@ -65,7 +65,7 @@ Patient* sign_inP(Patient* p) {
 		printf("Patient could not be allocated\n");
 		return NULL;
 	}
-	FILE* fp = fopen("PatientData.txt", "rb");//opens patient database with read binary mode
+	FILE* fp = fopen("PatientData.dat", "rb");//opens patient database with read binary mode
 	if (!fp) {
 		perror("Cannot open file");
 		return NULL;
@@ -79,7 +79,7 @@ Patient* sign_inP(Patient* p) {
 
 /*user validation - returns 1 if user is validated, else returns 0. */
 int user_validation_P(const char* user_n) {
-	FILE* fp = fopen("DoctorData.txt", "rb");
+	FILE* fp = fopen("PatientData.dat", "rb");
 	Patient* p_test = malloc(sizeof(Patient));
 	int len = strlen(user_n);
 	if (len >= 5 && len <= 20) {
@@ -96,7 +96,7 @@ int user_validation_P(const char* user_n) {
 	else//len is higher than 20 and lower than 5.
 		return 0;
 	while (fread(p_test, sizeof(Patient), 1, fp))//continue validation
-		if (strcmp(p_test->un, user_n))
+		if (!strcmp(p_test->un, user_n))
 			return 0;
 	printf("User validated.\n");//else
 	return 1;

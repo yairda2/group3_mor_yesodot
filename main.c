@@ -5,14 +5,32 @@
 void Menu();//Prints main menu
 void registerMenu();//Prints register menu
 void sign_in_Menu();//Prints sign in menu
-void doctor_Menu();//Prints doctor menu
-void patient_Menu();//Prints patient menu
-//check if IDs between doctor and patient are same 
-
+//void doctor_Menu(Doctor* d);//Prints doctor menu
+void patient_Menu(Patient* p);//Prints patient menu
+//int flush_database();
+//check if IDs between doctor and patient are same
 int main() { 
-	Menu();
-
-	return 0;
+	
+	//Menu();
+	///*FILE* fp = fopen("DoctorData.dat", "ab");
+	//Doctor d2;
+	//Doctor d = { .un = "Tomer",.pass = "Burman",.ID = "207598970",
+	//.name = "Tomer",.last_n = "Burman",.specialty = "Doctor",.gender = "Male" };
+	//fwrite(&d, sizeof(Doctor), 1, fp);
+	//fseek(fp, 0, SEEK_SET);
+	//fclose(fp);
+	//fp = fopen("DoctorData.dat", "rb+");
+	//fread(&d2, sizeof(Doctor), 1, fp);
+	//printDoctor(&d2);
+	//fclose(fp);*/
+	///*FILE* fp = fopen("DoctorData.txt", "rb+");
+	//Doctor d = { .un = "Tomer",.pass = "054209T",.ID = "207598970",.name = "Tomer",.last_n = "Burman",.specialty = "Doctor",.gender = "Male" };
+	//Doctor d2;
+	//fwrite(&d, sizeof(Doctor), 1, fp);
+	//fseek(fp, 0, SEEK_SET);
+	//	fread(&d2, sizeof(Doctor), 1, fp);
+	//	printDoctor(&d2);*/
+	//return 0;
 }
 
 /*Menu function - prints menu*/
@@ -30,6 +48,8 @@ void Menu() {
 		case SIGN_IN:
 			sign_in_Menu();
 			break;
+	/*	case MANAGING_DATABASE :
+			flush_database();*/
 		case EXIT:
 			printf("Goodbye ! :)\n");
 			break;
@@ -47,19 +67,17 @@ void registerMenu() {
 	enum registeration { DOCTOR = 1, PATIENT = 2, GO_BACK = 3 };
 	int choice,flag=0;
 	Patient* p;
-	Doctor* d;
+	Doctor d;
 	do {
 		printf("How would you like to register ?\n");
 		printf("(1). Doctor\n (2). Patient\n (3). Go back\n");
 		scanf("%d", &choice);
 		switch (choice) {
 		case DOCTOR:
-			d = malloc(sizeof(Doctor));
-			flag = initiateDoctor(d);
+			flag = initiateDoctor(&d);
 			if (flag)
-				if(registerDoctor(d))
+				if(registerDoctor(&d))
 			printf("Registed successfuly ! \n");
-			free(d);
 			break;
 		case PATIENT:
 			p = malloc(sizeof(Patient));
@@ -93,9 +111,10 @@ void sign_in_Menu() {
 		case DOCTOR:
 			d = malloc(sizeof(Doctor));
 			d = sign_inD(d);
+			if(!d)
 			printDoctor(d);
-		/*	if (d)
-				doctor_Menu();*/
+			if (d)
+				/*doctor_Menu(d);*/
 			free(d);
 			break;
 		case PATIENT:
@@ -113,12 +132,37 @@ void sign_in_Menu() {
 		}
 	} while (choice != GO_BACK);
 }
+//
+//void doctor_Menu(Doctor* d) {
+//	enum doctor_Menu { PRINT_DOCTOR = 1, EDIT_DOCTOR = 2 };
+//	int choice;
+//	do {
+//		printf("Hello dr.%s %s.\n What would you like to do ?\n", d->name, d->last_n);
+//		scanf("%d", &choice);
+//		switch (choice) {
+//		case PRINT_DOCTOR:
+//			printDoctor(d);
+//		case EDIT_DOCTOR:
+//			editDoctor(d);
+//		}
+//	}
+//}
 
-void doctor_Menu() {
+void patient_Menu(Patient* p) {
+
 
 }
 
-void patient_Menu() {
-
-
-}
+//int flush_database() {
+//	FILE* fp = fopen("DoctorData.txt", "w");
+//	if (!fp) {
+//		perror("Error flushing\n");
+//		return 0;
+//	}
+//	FILE* fp = fopen("PatientData.txt", "w");
+//	if (!fp) {
+//		perror("Error flushing\n");
+//		return 0;
+//	}
+//	return 1;
+//}

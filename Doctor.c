@@ -2,8 +2,8 @@
 #include "Doctor.h"
 /*Registers a doctor to doctors database file.
 storing in text file by the size of doctor struct..*/
-int registerDoctor(const Doctor* d1) {
-	FILE* fp = fopen("DoctorData.txt", "ab");
+int registerDoctor(Doctor* d1) {
+	FILE* fp = fopen("DoctorData.dat", "ab");
 	if (fp == NULL) {
 		perror("Cannot open file");
 		exit(1);
@@ -73,7 +73,7 @@ int password_validation(char* pass) {
 
 /*user validation - returns 1 if user is validated, else returns 0. */
 int user_validation_D(char* user_n) {
-	FILE* fp = fopen("DoctorData.txt", "rb");
+	FILE* fp = fopen("DoctorData.dat", "rb");
 	Doctor* d_test = malloc(sizeof(Doctor));
 	int len = strlen(user_n);
 	if (len >= 5 && len <= 20) {
@@ -90,7 +90,7 @@ int user_validation_D(char* user_n) {
 	else//len is higher than 20 and lower than 5.
 		return 0;
 	while (fread(d_test, sizeof(Doctor), 1, fp))//continue validation
-		if (strcmp(d_test->un, user_n))
+		if (!strcmp(d_test->un, user_n))
 			return 0;
 	printf("User validated.\n");//else
 	return 1;
@@ -105,7 +105,7 @@ Doctor* sign_inD(Doctor* d) {
 	scanf("%s", user);
 	printf("Please enter pass word:\n");
 	scanf("%s", pass);
-	FILE* fp = fopen("DoctorData.txt", "rb");//opening file for binary read
+	FILE* fp = fopen("DoctorData.dat", "rb");//opening file for binary read
 	if (!fp) {//file not open. 
 		perror("Cannot open file");
 		exit(1);
@@ -118,5 +118,59 @@ Doctor* sign_inD(Doctor* d) {
 	}
 	fclose(fp);
 	return NULL;
+
+}
+
+
+
+
+void editDoctor(Doctor* d) {
+	enum edit { NAME = 1, LAST_NAME = 2,ID=3,SPECIALTY=4,PASSWORD=5,GO_BACK=6 };
+	int choice;
+	Doctor temp_D;
+	FILE* fp = fopen("DoctorData.dat", "w+");
+	if (!fp) {
+		perror("Cannot open file");
+		exit(1);
+	}
+	printf("What would you like to edit/remove?\n");
+	printf("(1). Name\n (2). Last name\n (3). ID\n (4). SPECIALTY\n (5). PASSWORD\n (6). Go back\n");
+	scanf("%d", &choice);
+	switch (choice) {
+	case NAME:
+		printf("Enter name:\n");
+		scanf("%s", d->name);
+		while (fread(&temp_D, sizeof(Doctor), 1, fp)) {
+			if (!strcmp(d->name, temp_D.name)) {
+				strcpy(d->name, temp_D.name);
+				fseek(fp, -350, SEEK_CUR);
+				fwrite(d, sizeof(Doctor), 1, fp);
+				fclose(fp);
+				break;
+			}
+		}
+		break;
+	case LAST_NAME:
+
+		break;
+
+	case ID:
+
+		break;
+
+	case SPECIALTY:
+
+		break;
+
+	case PASSWORD:
+
+		break;
+	case GO_BACK:
+		break;
+	default:
+		printf("You entered a wrong input. Please try again\n");
+		break;
+
+	}while (choice != GO_BACK);
 
 }
