@@ -5,7 +5,7 @@
 void Menu();//Prints main menu
 void registerMenu();//Prints register menu
 void sign_in_Menu();//Prints sign in menu
-//void doctor_Menu(Doctor* d);//Prints doctor menu
+void doctor_Menu(Doctor* d);//Prints doctor menu
 void patient_Menu(Patient* p);//Prints patient menu
 int flush_database();
 //check if IDs between doctor and patient are same
@@ -79,7 +79,7 @@ void registerMenu() {
 			printf("You entered a wrong input. please try again.\n");
 			break;
 		}
-	} while (choice != GO_BACK);
+	} while (choice > GO_BACK || choice <DOCTOR);
 }
 
 /*Sign in menu - prints sign in methods : 
@@ -102,7 +102,7 @@ void sign_in_Menu() {
 			else
 				printf("Could not sign in. Please make sure you're using a valid username and password.\n");
 			if (d)
-				/*doctor_Menu(d);*/
+				doctor_Menu(d);
 			free(d);
 			break;
 		case PATIENT:
@@ -121,23 +121,24 @@ void sign_in_Menu() {
 			printf("You entered a wrong choice. Please try again.\n");
 			break;
 		}
-	} while (choice != GO_BACK);
+	} while (choice>GO_BACK || choice<DOCTOR);
 }
-//
-//void doctor_Menu(Doctor* d) {
-//	enum doctor_Menu { PRINT_DOCTOR = 1, EDIT_DOCTOR = 2 };
-//	int choice;
-//	do {
-//		printf("Hello dr.%s %s.\n What would you like to do ?\n", d->name, d->last_n);
-//		scanf("%d", &choice);
-//		switch (choice) {
-//		case PRINT_DOCTOR:
-//			printDoctor(d);
-//		case EDIT_DOCTOR:
-//			editDoctor(d);
-//		}
-//	}
-//}
+
+void doctor_Menu(Doctor* d) {
+	enum doctor_Menu { PRINT_DOCTOR = 1, EDIT_DOCTOR = 2 };
+	int choice;
+		printf("Hello dr.%s %s.\n What would you like to do ?\n", d->name, d->last_n);
+		printf("(1).Print doctors info.\n(2). Edit doctor\n");
+		scanf("%d", &choice);
+		switch (choice) {
+		case PRINT_DOCTOR:
+			printDoctor(d);
+			break;
+		case EDIT_DOCTOR:
+			editDoctor(d);
+			break;
+		}
+}
 
 void patient_Menu(Patient* p) {
 
@@ -145,13 +146,13 @@ void patient_Menu(Patient* p) {
 }
 
 int flush_database() {
-	FILE* fp = fopen("DoctorData.txt", "w");
+	FILE* fp = fopen("DoctorData.bin", "wb+");
 	if (!fp) {
 		perror("Error flushing\n");
 		return 0;
 	}
 	fclose(fp);
-	fp = fopen("PatientData.txt", "w");
+	fp = fopen("PatientData.bin", "wb+");
 	if (!fp) {
 		perror("Error flushing\n");
 		return 0;

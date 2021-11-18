@@ -1,11 +1,11 @@
 #pragma once
+#ifndef DOCTOR_H
+#define DOCTOR_H
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #define TOTAL_SIZE 350//size of doctor
 #define SIZE 50//size of normal string.
-#ifndef DOCTOR_H
-#define DOCTOR_H
 struct Doctor { //Doctors struct 
 	char un[SIZE];//user
 	char pass[SIZE];//pass
@@ -14,7 +14,6 @@ struct Doctor { //Doctors struct
 	char last_n[SIZE];//last
 	char specialty[SIZE];//specialty
 	char gender[SIZE];//gender
-
 }typedef Doctor;
 
 //functions 
@@ -25,6 +24,7 @@ void printDoctor(const Doctor* d);//printing doctor.
 int user_validation_D(char* user_n);//validates the user input and that it's not already in the system
 int password_validation(char* pass);//validates password input
 Doctor* sign_inD(Doctor* d);
+int modify_Doctor(const Doctor* d, FILE* fp);
 
 
 

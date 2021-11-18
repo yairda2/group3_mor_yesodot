@@ -1,8 +1,9 @@
 #pragma once
-#include <stdio.h>
-#include <stdlib.h>
 #ifndef PATIENT_H
 #define PATIENT_H
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #define SIZE 50
 struct Patient { //Doctors struct 
 	char un[SIZE];//user

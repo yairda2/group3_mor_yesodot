@@ -42,7 +42,7 @@ void printPatient(const Patient* p) {
 /*Registers a patient to patients database file
 storing in text file by the size of patient struct. */
 int registerPatient(const Patient* p) {
-	FILE* fp = fopen("PatientData.dat", "rb+");
+	FILE* fp = fopen("PatientData.bin", "rb+");
 	if (!fp) {
 		perror("Cannot open file");
 		exit(1);
@@ -65,7 +65,7 @@ Patient* sign_inP(Patient* p) {
 		printf("Patient could not be allocated\n");
 		return NULL;
 	}
-	FILE* fp = fopen("PatientData.dat", "rb");//opens patient database with read binary mode
+	FILE* fp = fopen("PatientData.bin", "rb");//opens patient database with read binary mode
 	if (!fp) {
 		perror("Cannot open file");
 		return NULL;
@@ -79,7 +79,7 @@ Patient* sign_inP(Patient* p) {
 
 /*user validation - returns 1 if user is validated, else returns 0. */
 int user_validation_P(const char* user_n) {
-	FILE* fp = fopen("PatientData.dat", "rb");
+	FILE* fp = fopen("PatientData.bin", "rb");
 	Patient* p_test = (Patient*)malloc(sizeof(Patient));
 	int len = strlen(user_n);
 	if (len >= 5 && len <= 20) {
@@ -88,9 +88,6 @@ int user_validation_P(const char* user_n) {
 				continue;
 			printf("Cannot validate user.\n");
 			return 0;
-			/*if ((user_n[i] >= 0 && user_n[i] <= 47) || (user_n[i] >= 58 && user_n[i] <= 64) || (user_n[i] >= 91 && user_n[i] <= 96) || user_n[i] >= 123) {
-				printf("Cannot validate username[LEGNTH 5-20, NO SIGNS ALLOWED.\n");
-				return 0;*/
 		}
 	}
 	else//len is higher than 20 and lower than 5.
