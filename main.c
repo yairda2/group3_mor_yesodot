@@ -7,39 +7,23 @@ void registerMenu();//Prints register menu
 void sign_in_Menu();//Prints sign in menu
 //void doctor_Menu(Doctor* d);//Prints doctor menu
 void patient_Menu(Patient* p);//Prints patient menu
-//int flush_database();
+int flush_database();
 //check if IDs between doctor and patient are same
-int main() { 
-	
-	//Menu();
-	///*FILE* fp = fopen("DoctorData.dat", "ab");
-	//Doctor d2;
-	//Doctor d = { .un = "Tomer",.pass = "Burman",.ID = "207598970",
-	//.name = "Tomer",.last_n = "Burman",.specialty = "Doctor",.gender = "Male" };
-	//fwrite(&d, sizeof(Doctor), 1, fp);
-	//fseek(fp, 0, SEEK_SET);
-	//fclose(fp);
-	//fp = fopen("DoctorData.dat", "rb+");
-	//fread(&d2, sizeof(Doctor), 1, fp);
-	//printDoctor(&d2);
-	//fclose(fp);*/
-	///*FILE* fp = fopen("DoctorData.txt", "rb+");
-	//Doctor d = { .un = "Tomer",.pass = "054209T",.ID = "207598970",.name = "Tomer",.last_n = "Burman",.specialty = "Doctor",.gender = "Male" };
-	//Doctor d2;
-	//fwrite(&d, sizeof(Doctor), 1, fp);
-	//fseek(fp, 0, SEEK_SET);
-	//	fread(&d2, sizeof(Doctor), 1, fp);
-	//	printDoctor(&d2);*/
-	//return 0;
-}
 
+
+
+int main() { 
+
+	Menu();
+	return 0;
+}
 /*Menu function - prints menu*/
 void Menu() {
-	enum choice { REGISTER = 1, SIGN_IN = 2, EXIT = 3 };
+	enum choice { REGISTER = 1, SIGN_IN = 2, EXIT = 3, DELETE_DATA = 4 };
 	int choice;
 	do{
 	printf("Hello ! Please choose one of the following :\n");
-	printf("(1). Register\n (2). Sign in\n (3). Exit the system\n");
+	printf("(1). Register\n(2). Sign in\n(3). Exit the system\n(4). Delete data\n");
 	scanf("%d", &choice);
 		switch (choice) {
 		case REGISTER:
@@ -52,6 +36,9 @@ void Menu() {
 			flush_database();*/
 		case EXIT:
 			printf("Goodbye ! :)\n");
+			break;
+		case DELETE_DATA:
+			flush_database();
 			break;
 		default:
 			printf("You entered a wrong input. Please try again\n");
@@ -66,7 +53,7 @@ uses initiateDoctor and registerDoctor. allocates and releases memory.*/
 void registerMenu() {
 	enum registeration { DOCTOR = 1, PATIENT = 2, GO_BACK = 3 };
 	int choice,flag=0;
-	Patient* p;
+	Patient p;
 	Doctor d;
 	do {
 		printf("How would you like to register ?\n");
@@ -75,17 +62,16 @@ void registerMenu() {
 		switch (choice) {
 		case DOCTOR:
 			flag = initiateDoctor(&d);
-			if (flag)
-				if(registerDoctor(&d))
-			printf("Registed successfuly ! \n");
+			if (flag) {
+				if (registerDoctor(&d))
+					printf("Registed successfuly ! \n");
+			}
 			break;
 		case PATIENT:
-			p = malloc(sizeof(Patient));
-			flag = initiatePatient(p);
+			flag = initiatePatient(&p);
 			if (flag)
-				if (registerPatient(p))
+				if (registerPatient(&p))
 					printf("Registed successfuly ! \n");
-			free(p);
 			break;
 		case GO_BACK:
 			break;
@@ -109,18 +95,23 @@ void sign_in_Menu() {
 		scanf("%d", &choice);
 		switch (choice) {
 		case DOCTOR:
-			d = malloc(sizeof(Doctor));
+			d = (Doctor*)malloc(sizeof(Doctor));
 			d = sign_inD(d);
-			if(!d)
+			if(d)
 			printDoctor(d);
+			else
+				printf("Could not sign in. Please make sure you're using a valid username and password.\n");
 			if (d)
 				/*doctor_Menu(d);*/
 			free(d);
 			break;
 		case PATIENT:
-			p = malloc(sizeof(Patient));
+			p = (Patient*)malloc(sizeof(Patient));
 			p = sign_inP(p);
-			printPatient(p);
+			if (p)
+				printPatient(p);
+			else
+				printf("Could not sign in. Please make sure you're using a valid username and password.\n");
 		/*	if (p)
 				patient_Menu();*/
 			free(p);
@@ -153,16 +144,18 @@ void patient_Menu(Patient* p) {
 
 }
 
-//int flush_database() {
-//	FILE* fp = fopen("DoctorData.txt", "w");
-//	if (!fp) {
-//		perror("Error flushing\n");
-//		return 0;
-//	}
-//	FILE* fp = fopen("PatientData.txt", "w");
-//	if (!fp) {
-//		perror("Error flushing\n");
-//		return 0;
-//	}
-//	return 1;
-//}
+int flush_database() {
+	FILE* fp = fopen("DoctorData.txt", "w");
+	if (!fp) {
+		perror("Error flushing\n");
+		return 0;
+	}
+	fclose(fp);
+	fp = fopen("PatientData.txt", "w");
+	if (!fp) {
+		perror("Error flushing\n");
+		return 0;
+	}
+	fclose(fp);
+	return 1;
+}

@@ -3,7 +3,7 @@
 /*Registers a doctor to doctors database file.
 storing in text file by the size of doctor struct..*/
 int registerDoctor(Doctor* d1) {
-	FILE* fp = fopen("DoctorData.dat", "ab");
+	FILE* fp = fopen("DoctorData.dat", "ab+");
 	if (fp == NULL) {
 		perror("Cannot open file");
 		exit(1);
@@ -24,13 +24,14 @@ void printDoctor(const Doctor* d) {
 /*recieves a pointer to doctor and puts input from the user to doctor. returns 1 if successfuly registered.*/
 int initiateDoctor(Doctor* d) {
 		int flagU = 0,flagP=0,tries=3;//validation of username and password
-		printf("Enter info\n");
+		printf("Enter info(After 3 tries you're sent back to menu)\n");
 		do {
 			if (tries == 0) {//tries to sign up.
 				return 0;
 			}
+			printf("try %d:\n", tries);
 			tries--;
-			printf("Please enter username:\n");//user
+			printf("Please enter username:[5-20 LENGTH, NUMBERS/SIGNS ARE NOT ALLOWED]\n");//user
 			scanf("%s", d->un);
 			flagU = user_validation_D(d->un);
 			if (!flagU){
@@ -73,8 +74,8 @@ int password_validation(char* pass) {
 
 /*user validation - returns 1 if user is validated, else returns 0. */
 int user_validation_D(char* user_n) {
-	FILE* fp = fopen("DoctorData.dat", "rb");
-	Doctor* d_test = malloc(sizeof(Doctor));
+	FILE* fp = fopen("DoctorData.dat", "rb+");
+	Doctor* d_test = (Doctor*)malloc(sizeof(Doctor));
 	int len = strlen(user_n);
 	if (len >= 5 && len <= 20) {
 		for (int i = 0; i < len; i++) {
@@ -105,7 +106,7 @@ Doctor* sign_inD(Doctor* d) {
 	scanf("%s", user);
 	printf("Please enter pass word:\n");
 	scanf("%s", pass);
-	FILE* fp = fopen("DoctorData.dat", "rb");//opening file for binary read
+	FILE* fp = fopen("DoctorData.dat", "rb+");//opening file for binary read
 	if (!fp) {//file not open. 
 		perror("Cannot open file");
 		exit(1);

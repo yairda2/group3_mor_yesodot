@@ -42,7 +42,7 @@ void printPatient(const Patient* p) {
 /*Registers a patient to patients database file
 storing in text file by the size of patient struct. */
 int registerPatient(const Patient* p) {
-	FILE* fp = fopen("PatientData.dat", "ab");
+	FILE* fp = fopen("PatientData.dat", "rb+");
 	if (!fp) {
 		perror("Cannot open file");
 		exit(1);
@@ -57,7 +57,7 @@ returns NULL if not found or something went wrong.*/
 Patient* sign_inP(Patient* p) {
 	char user[SIZE];
 	char pass[SIZE];
-	printf("Please enter user name:\n");
+	printf("Please enter user name:[5-20 LENGTH, NUMBERS AND SIGNS ARE NOT ALLOWED]\n");
 	scanf("%s", user);
 	printf("Please enter password:\n");
 	scanf("%s", pass);
@@ -80,7 +80,7 @@ Patient* sign_inP(Patient* p) {
 /*user validation - returns 1 if user is validated, else returns 0. */
 int user_validation_P(const char* user_n) {
 	FILE* fp = fopen("PatientData.dat", "rb");
-	Patient* p_test = malloc(sizeof(Patient));
+	Patient* p_test = (Patient*)malloc(sizeof(Patient));
 	int len = strlen(user_n);
 	if (len >= 5 && len <= 20) {
 		for (int i = 0; i < len; i++) {
@@ -99,5 +99,7 @@ int user_validation_P(const char* user_n) {
 		if (!strcmp(p_test->un, user_n))
 			return 0;
 	printf("User validated.\n");//else
+	free(p_test);
+	fclose(fp);
 	return 1;
 }
