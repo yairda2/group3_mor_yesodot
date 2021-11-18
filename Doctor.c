@@ -144,7 +144,7 @@ void editDoctor(Doctor* d) {
 	case NAME:
 		printf("Enter new name:\n");
 		scanf("%s", temp);
-			if (modify_Doctor(d, fp)) {
+			if (search_doctor_to_modify(d, fp)) {
 				strcpy(d->name, temp);
 				fwrite(d, sizeof(Doctor), 1, fp);
 				fclose(fp);
@@ -160,7 +160,7 @@ void editDoctor(Doctor* d) {
 	case LAST_NAME:
 		printf("Enter new last name:\n");
 		scanf("%s", temp);
-			if (modify_Doctor(d, fp)) {
+			if (search_doctor_to_modify(d, fp)) {
 				strcpy(d->last_n, temp);
 				fwrite(d, sizeof(Doctor), 1, fp);
 				fclose(fp);
@@ -176,10 +176,11 @@ void editDoctor(Doctor* d) {
 	case ID:
 		printf("Enter new ID\n");
 		scanf("%s", temp);
-		if (modify_Doctor(d, fp)) {
+		if (search_doctor_to_modify(d, fp)) {
 			strcpy(d->ID, temp);
 			fwrite(d, sizeof(Doctor), 1, fp);
 			flag++;
+			fclose(fp);
 		}
 		if (flag)
 			printf("ID changed.\n");
@@ -188,11 +189,34 @@ void editDoctor(Doctor* d) {
 		break;
 
 	case SPECIALTY:
-
+		printf("Enter new specialty:\n");
+		scanf("%s", temp);
+		if (search_doctor_to_modify(d, fp)) {
+			strcpy(d->specialty, temp);
+			fwrite(d, sizeof(Doctor), 1, fp);
+			flag++;
+			fclose(fp);
+		}
+		if (flag)
+			printf("Speciality changed.\n");
+		else
+			printf("Something went wrong.\n");
 		break;
 
 	case PASSWORD:
-
+		printf("Enter new password[Notice you will be reffered to main menu once you change your password.]\n");
+		scanf("%s", temp);
+		if (password_validation(temp)) {
+			if (search_doctor_to_modify(d, fp)) {
+				strcpy(d->pass, temp);
+				fwrite(d, sizeof(Doctor), 1, fp);
+				flag++;
+				fclose(fp);
+			}
+			if (flag)
+				printf("Password changed.\n");
+		}
+		break;
 		break;
 	case GO_BACK:
 		break;
@@ -204,7 +228,23 @@ void editDoctor(Doctor* d) {
 
 }
 
-int modify_Doctor(Doctor* d, FILE* fp) {
+void doctor_Menu(Doctor* d) {
+	enum doctor_Menu { PRINT_DOCTOR = 1, EDIT_DOCTOR = 2 };
+	int choice;
+	printf("Hello dr.%s %s.\n What would you like to do ?\n", d->name, d->last_n);
+	printf("(1).Print doctors info.\n(2). Edit doctor\n");
+	scanf("%d", &choice);
+	switch (choice) {
+	case PRINT_DOCTOR:
+		printDoctor(d);
+		break;
+	case EDIT_DOCTOR:
+		editDoctor(d);
+		break;
+	}
+}
+
+int search_doctor_to_modify(const Doctor* d, FILE* fp) {
 	Doctor temp_D;
 	while (fread(&temp_D, sizeof(Doctor), 1, fp)) {
 		if (!strcmp(d->un, temp_D.un)) {

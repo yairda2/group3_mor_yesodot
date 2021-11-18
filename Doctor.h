@@ -22,14 +22,12 @@ int initiateDoctor(Doctor* d);//creating doctor struct, returns pointer to struc
 int registerDoctor(Doctor* d);// registering a doctor returns 1 if successufuly registed.
 void printDoctor(const Doctor* d);//printing doctor.
 int user_validation_D(char* user_n);//validates the user input and that it's not already in the system
-int password_validation(char* pass);//validates password input
-Doctor* sign_inD(Doctor* d);
-int modify_Doctor(const Doctor* d, FILE* fp);
-
-
-
-
+int password_validation(char* pass);//validates password input returns 1 if validated.
+void doctor_Menu(Doctor* d);//Prints doctor menu
+Doctor* sign_inD(Doctor* d);//signs in and returns a pointer to the struct.
+int search_doctor_to_modify(const Doctor* d, FILE* fp);//modifies a doctor, returns 1 if successed. 0 if failed.
 void editDoctor(Doctor* d);//Edits detail of doctor.
+
 
 
 

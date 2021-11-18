@@ -5,7 +5,6 @@
 void Menu();//Prints main menu
 void registerMenu();//Prints register menu
 void sign_in_Menu();//Prints sign in menu
-void doctor_Menu(Doctor* d);//Prints doctor menu
 void patient_Menu(Patient* p);//Prints patient menu
 int flush_database();
 //check if IDs between doctor and patient are same
@@ -112,8 +111,8 @@ void sign_in_Menu() {
 				printPatient(p);
 			else
 				printf("Could not sign in. Please make sure you're using a valid username and password.\n");
-		/*	if (p)
-				patient_Menu();*/
+			if (p)
+				patient_Menu(p);
 			free(p);
 		case GO_BACK:
 			break;
@@ -124,26 +123,6 @@ void sign_in_Menu() {
 	} while (choice>GO_BACK || choice<DOCTOR);
 }
 
-void doctor_Menu(Doctor* d) {
-	enum doctor_Menu { PRINT_DOCTOR = 1, EDIT_DOCTOR = 2 };
-	int choice;
-		printf("Hello dr.%s %s.\n What would you like to do ?\n", d->name, d->last_n);
-		printf("(1).Print doctors info.\n(2). Edit doctor\n");
-		scanf("%d", &choice);
-		switch (choice) {
-		case PRINT_DOCTOR:
-			printDoctor(d);
-			break;
-		case EDIT_DOCTOR:
-			editDoctor(d);
-			break;
-		}
-}
-
-void patient_Menu(Patient* p) {
-
-
-}
 
 int flush_database() {
 	FILE* fp = fopen("DoctorData.bin", "wb+");

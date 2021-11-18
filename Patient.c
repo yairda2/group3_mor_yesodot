@@ -80,7 +80,7 @@ Patient* sign_inP(Patient* p) {
 /*user validation - returns 1 if user is validated, else returns 0. */
 int user_validation_P(const char* user_n) {
 	FILE* fp = fopen("PatientData.bin", "rb");
-	Patient* p_test = (Patient*)malloc(sizeof(Patient));
+	Patient p_test;
 	int len = strlen(user_n);
 	if (len >= 5 && len <= 20) {
 		for (int i = 0; i < len; i++) {
@@ -92,11 +92,114 @@ int user_validation_P(const char* user_n) {
 	}
 	else//len is higher than 20 and lower than 5.
 		return 0;
-	while (fread(p_test, sizeof(Patient), 1, fp))//continue validation
-		if (!strcmp(p_test->un, user_n))
+	while (fread(&p_test, sizeof(Patient), 1, fp))//continue validation
+		if (!strcmp(p_test.un, user_n))
 			return 0;
 	printf("User validated.\n");//else
-	free(p_test);
 	fclose(fp);
 	return 1;
+}
+
+
+void patient_Menu(Patient* p) {
+	int choice;
+	enum patient_menu { PRINT_PATIENT = 1, EDIT_PATIENT = 2, };
+	printf("Hello %s %s, How can we help you today?\n",p->name,p->last_n);
+	printf("(1). Print my details.\n(2). Edit my profit\n");
+	scanf("%d", &choice);
+	switch (choice) {
+	case PRINT_PATIENT:
+		printPatient(p);
+	case EDIT_PATIENT:
+		editPatient(p);
+	}
+
+
+}
+
+void editPatient(Patient* p) {
+	int choice,flag=0;
+	char temp[SIZE];
+	FILE* fp = fopen("PatientData.bin", "rb+");
+	enum edit_menu { NAME = 1, LAST_NAME = 2, ID = 3, PASSWORD = 4, GO_BACK = 5 };
+	printf("What would you like to change ?\n");
+	printf("(1). Name\n(2). Last name\n(3). ID\n(4). Password\n(5). Go back to main menu");
+	scanf("%d", &choice);
+	switch (choice) {
+	case NAME:
+		printf("Please enter new name:\n");
+		scanf("%s", temp);
+		if (search_patient_to_modify(p,fp)) {
+			strcpy(p->name, temp);
+			fwrite(p, sizeof(Patient), 1, fp);
+			fclose(fp);
+			flag++;
+		}
+		if (flag)
+			printf("Name was changed.\n");
+		else
+			printf("Something went wrong");
+		break;
+	case LAST_NAME:
+		printf("Please enter new last name:\n");
+		scanf("%s", temp);
+		if (search_patient_to_modify(p, fp)) {
+			strcpy(p->last_n, temp);
+			fwrite(p, sizeof(Patient), 1, fp);
+			flag++;
+			fclose(fp);
+		}
+		if (flag)
+			printf("Last name was changed.\n");
+		else
+			printf("Something went wrong");
+		break;
+	case ID:
+		printf("Please enter ID:\n");
+		scanf("%s", temp);
+		if (search_patient_to_modify(p, fp)) {
+			strcpy(p->ID, temp);
+			fwrite(p, sizeof(Patient), 1, fp);
+			flag++;
+			fclose(fp);
+		}
+		if (flag)
+			printf("ID was changed.\n");
+		else
+			printf("Something went wrong");
+		break;
+	case PASSWORD:
+		printf("Please enter new password:\n");
+		scanf("%s", temp);
+		if (password_validation(temp))
+			if (search_patient_to_modify(p, fp)) {
+				strcpy(p->pass, temp);
+				fwrite(p, sizeof(Patient), 1, fp);
+				flag++;
+				fclose(fp);
+			}
+		if (flag)
+			printf("password was changed.\n");
+		else {
+			printf("Something went wrong");
+			fclose(fp);
+		}
+		break;
+	case GO_BACK:
+			return;
+	default:
+		printf("You have entered a wrong choice. Redirecting to patient menu.\n");
+	}
+
+}
+
+search_patient_to_modify(const Patient* p, FILE* fp) {
+	Patient temp_P;
+	while (fread(&temp_P, sizeof(Patient), 1, fp)) {
+		if (!strcmp(p->un, temp_P.un)) {
+			fseek(fp, -TOTAL_SIZE_P, SEEK_CUR);
+			return 1;//user found
+		}
+	}
+	return 0;//failed to find username.
 }
