@@ -3,6 +3,7 @@
 
 /*recieves a pointer to patient. takes input from user and puts into patient. if successfuly stored returns 1. else return 0 .*/
 int initiatePatient(Patient* p) {
+	system("cls");
 	int flagU = 0, flagP = 0, tries = 3;//validation of username and password
 	printf("Enter patient info:\n");
 	do {
@@ -55,6 +56,7 @@ int registerPatient(const Patient* p) {
 /*returns a patient pointer if we get a match to user and pass from Patient database
 returns NULL if not found or something went wrong.*/
 Patient* sign_inP(Patient* p) {
+	system("cls");
 	char user[SIZE];
 	char pass[SIZE];
 	printf("Please enter user name:[5-20 LENGTH, NUMBERS AND SIGNS ARE NOT ALLOWED]\n");
@@ -110,8 +112,10 @@ void patient_Menu(Patient* p) {
 	switch (choice) {
 	case PRINT_PATIENT:
 		printPatient(p);
+		break;
 	case EDIT_PATIENT:
 		editPatient(p);
+		break;
 	}
 
 

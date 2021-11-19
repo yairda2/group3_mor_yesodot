@@ -23,18 +23,18 @@ void printDoctor(const Doctor* d) {
 
 /*recieves a pointer to doctor and puts input from the user to doctor. returns 1 if successfuly registered.*/
 int initiateDoctor(Doctor* d) {
-		int flagU = 0,flagP=0,tries=3;//validation of username and password
-		printf("Enter info(After 3 tries you're sent back to menu)\n");
+	system("cls");
+		int flagU = 0,flagP=0,tries=1;//validation of username and password
+		printf("				****Doctor registration****\n\nEnter info[After 3 tries you will be redirected to main menu]:\n");
 		do {
-			if (tries == 0) {//tries to sign up.
+			if (tries == 4) {//tries to sign up.
 				return 0;
 			}
-			printf("try %d:\n", tries);
-			tries--;
+			printf("try %d:\n", tries++);
 			printf("Please enter username:[5-20 LENGTH, NUMBERS/SIGNS ARE NOT ALLOWED]\n");//user
 			scanf("%s", d->un);
 			flagU = user_validation_D(d->un);
-			if (!flagU){
+			if (!flagU){//if user was not validated
 				continue;
 		}
 			printf("Please enter password:\n");
@@ -100,15 +100,16 @@ int user_validation_D(char* user_n) {
 
 /*recieves user/password and pointer to doctor. if it finds a match prints logged in and returns the doctor, else prints false and returns null */
 Doctor* sign_inD(Doctor* d) {
+	system("cls");
 	char user[SIZE];
 	char pass[SIZE];
-	printf("Please enter user name:\n");
+	printf("Please enter Username:\n");
 	scanf("%s", user);
-	printf("Please enter pass word:\n");
+	printf("Please enter Password:\n");
 	scanf("%s", pass);
 	FILE* fp = fopen("DoctorData.bin", "rb+");//opening file for binary read
 	if (!fp) {//file not open. 
-		perror("Cannot open file");
+		perror("Cannot open file\n");
 		exit(1);
 	}
 	while (fread(d, sizeof(Doctor), 1, fp)) {//reads from file till eof reaches end.
@@ -128,9 +129,9 @@ Doctor* sign_inD(Doctor* d) {
 prints a menu of the data you can edit
 it updates the file with input from user.*/
 void editDoctor(Doctor* d) {
+	system("cls");
 	enum edit { NAME = 1, LAST_NAME = 2,ID=3,SPECIALTY=4,PASSWORD=5,GO_BACK=6 };
-	int choice,flag = 0;
-	Doctor temp_D;
+	int choice, flag = 0;
 	char temp[50];
 	FILE* fp = fopen("DoctorData.bin", "rb+");
 	if (!fp) {
@@ -216,7 +217,7 @@ void editDoctor(Doctor* d) {
 			if (flag)
 				printf("Password changed.\n");
 		}
-		break;
+
 		break;
 	case GO_BACK:
 		break;
@@ -229,19 +230,26 @@ void editDoctor(Doctor* d) {
 }
 
 void doctor_Menu(Doctor* d) {
-	enum doctor_Menu { PRINT_DOCTOR = 1, EDIT_DOCTOR = 2 };
+	enum doctor_Menu { PRINT_DOCTOR = 1, EDIT_DOCTOR = 2,GO_BACK=3 };
 	int choice;
-	printf("Hello dr.%s %s.\n What would you like to do ?\n", d->name, d->last_n);
-	printf("(1).Print doctors info.\n(2). Edit doctor\n");
+	printf(		"Hello dr.%s %s!\n\n What would you like to do ?", d->name, d->last_n);
+	do {
+	printf("\n\n(1).Look at my info.\n(2). Edit info\n(3).Sign out\n");
 	scanf("%d", &choice);
-	switch (choice) {
-	case PRINT_DOCTOR:
-		printDoctor(d);
-		break;
-	case EDIT_DOCTOR:
-		editDoctor(d);
-		break;
-	}
+		switch (choice) {
+		case PRINT_DOCTOR:
+			printDoctor(d);
+			break;
+		case EDIT_DOCTOR:
+			editDoctor(d);
+			break;
+		case GO_BACK:
+			printf("Good bye Dr. %s !\n Signing out..\n",d->name);
+			break;
+		default:
+			printf("You have entered an invalid choice, Please try again.\n ");
+		}
+	} while (choice != GO_BACK);
 }
 
 int search_doctor_to_modify(const Doctor* d, FILE* fp) {
