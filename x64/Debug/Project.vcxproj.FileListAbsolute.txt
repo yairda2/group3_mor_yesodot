@@ -1,0 +1,2 @@
+C:\Users\valer\source\repos\group3_mor_yesodot\x64\Debug\Project.exe
+C:\Users\valer\source\repos\group3_mor_yesodot\x64\Debug\Project.pdb

@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 #define TOTAL_SIZE 350//size of doctor
+#define DOCTOR_FILE "DoctorData.bin"
 #define SIZE 50//size of normal string.
 struct Doctor { //Doctors struct 
 	char un[SIZE];//user
@@ -14,6 +15,7 @@ struct Doctor { //Doctors struct
 	char last_n[SIZE];//last
 	char specialty[SIZE];//specialty
 	char gender[SIZE];//gender
+
 }typedef Doctor;
 
 //functions 

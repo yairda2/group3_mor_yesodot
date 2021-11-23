@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#define PATIENT_FILE "PatientData.bin"
 #define TOTAL_SIZE_P 300
 #define SIZE 50
 struct Patient { //Doctors struct 

@@ -3,7 +3,7 @@
 /*Registers a doctor to doctors database file.
 storing in text file by the size of doctor struct..*/
 int registerDoctor(Doctor* d1) {
-	FILE* fp = fopen("DoctorData.bin", "ab");
+	FILE* fp = fopen(DOCTOR_FILE, "ab");
 	if (fp == NULL) {
 		perror("Cannot open file");
 		exit(1);
@@ -12,7 +12,6 @@ int registerDoctor(Doctor* d1) {
 	fclose(fp);
 	return 1;//success
 }
-
 
 /*Print doctor */
 void printDoctor(const Doctor* d) {
@@ -74,7 +73,7 @@ int password_validation(char* pass) {
 
 /*user validation - returns 1 if user is validated, else returns 0. */
 int user_validation_D(char* user_n) {
-	FILE* fp = fopen("DoctorData.bin", "rb+");
+	FILE* fp = fopen(DOCTOR_FILE, "rb+");
 	Doctor* d_test = (Doctor*)malloc(sizeof(Doctor));
 	int len = strlen(user_n);
 	if (len >= 5 && len <= 20) {
@@ -107,7 +106,7 @@ Doctor* sign_inD(Doctor* d) {
 	scanf("%s", user);
 	printf("Please enter Password:\n");
 	scanf("%s", pass);
-	FILE* fp = fopen("DoctorData.bin", "rb+");//opening file for binary read
+	FILE* fp = fopen(DOCTOR_FILE, "rb+");//opening file for binary read
 	if (!fp) {//file not open. 
 		perror("Cannot open file\n");
 		exit(1);
@@ -133,7 +132,7 @@ void editDoctor(Doctor* d) {
 	enum edit { NAME = 1, LAST_NAME = 2,ID=3,SPECIALTY=4,PASSWORD=5,GO_BACK=6 };
 	int choice, flag = 0;
 	char temp[50];
-	FILE* fp = fopen("DoctorData.bin", "rb+");
+	FILE* fp = fopen(DOCTOR_FILE, "rb+");
 	if (!fp) {
 		perror("Cannot open file");
 		exit(1);
@@ -145,11 +144,11 @@ void editDoctor(Doctor* d) {
 	case NAME:
 		printf("Enter new name:\n");
 		scanf("%s", temp);
-			if (search_doctor_to_modify(d, fp)) {
-				strcpy(d->name, temp);
-				fwrite(d, sizeof(Doctor), 1, fp);
-				fclose(fp);
-				flag++;
+			if (search_doctor_to_modify(d, fp)) {//if doctor found enters 
+				strcpy(d->name, temp);//copying name 
+				fwrite(d, sizeof(Doctor), 1, fp);//writing to file 
+				fclose(fp);//closin file
+				flag++;//raise flag
 			}
 		if (flag)
 			printf("Name changed.\n");
@@ -161,9 +160,9 @@ void editDoctor(Doctor* d) {
 	case LAST_NAME:
 		printf("Enter new last name:\n");
 		scanf("%s", temp);
-			if (search_doctor_to_modify(d, fp)) {
-				strcpy(d->last_n, temp);
-				fwrite(d, sizeof(Doctor), 1, fp);
+			if (search_doctor_to_modify(d, fp)) {//if doctor found enters
+				strcpy(d->last_n, temp);//copying data
+				fwrite(d, sizeof(Doctor), 1, fp);//writing to file
 				fclose(fp);
 				flag++;
 			}
@@ -228,11 +227,12 @@ void editDoctor(Doctor* d) {
 	}
 
 }
-
+/*Doctor menu - prints doctor menu 
+uses printDoctor and editDoctor functions */
 void doctor_Menu(Doctor* d) {
-	enum doctor_Menu { PRINT_DOCTOR = 1, EDIT_DOCTOR = 2,GO_BACK=3 };
+	enum doctor_Menu { PRINT_DOCTOR = 1, EDIT_DOCTOR = 2,VIEW_APPOINTMENTS=3,GO_BACK=4 };//enum choices
 	int choice;
-	printf(		"Hello dr.%s %s!\n\n What would you like to do ?", d->name, d->last_n);
+	printf("Hello dr.%s %s!\n\nWhat would you like to do ?", d->name, d->last_n);
 	do {
 	printf("\n\n(1).Look at my info.\n(2). Edit info\n(3).Sign out\n");
 	scanf("%d", &choice);
@@ -243,6 +243,8 @@ void doctor_Menu(Doctor* d) {
 		case EDIT_DOCTOR:
 			editDoctor(d);
 			break;
+		case VIEW_APPOINTMENTS:
+
 		case GO_BACK:
 			printf("Good bye Dr. %s !\n Signing out..\n",d->name);
 			break;
@@ -252,11 +254,15 @@ void doctor_Menu(Doctor* d) {
 	} while (choice != GO_BACK);
 }
 
+/*Searches doctor in file, once found points file pointer 1 struct back
+and returns 1, else returns 0. */
+
+//search_doc
 int search_doctor_to_modify(const Doctor* d, FILE* fp) {
 	Doctor temp_D;
 	while (fread(&temp_D, sizeof(Doctor), 1, fp)) {
 		if (!strcmp(d->un, temp_D.un)) {
-			fseek(fp, -TOTAL_SIZE, SEEK_CUR);
+			fseek(fp,-(int)sizeof(Doctor), SEEK_CUR);
 			return 1;//user found
 		}
 	}

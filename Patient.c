@@ -102,22 +102,29 @@ int user_validation_P(const char* user_n) {
 	return 1;
 }
 
-
+/*Patient menu
+Prints patient menu,uses printPatient/editPatient functions.
+*/
 void patient_Menu(Patient* p) {
 	int choice;
-	enum patient_menu { PRINT_PATIENT = 1, EDIT_PATIENT = 2, };
+	enum patient_menu { PRINT_PATIENT = 1, EDIT_PATIENT = 2,GO_BACK=3 };
 	printf("Hello %s %s, How can we help you today?\n",p->name,p->last_n);
-	printf("(1). Print my details.\n(2). Edit my profit\n");
-	scanf("%d", &choice);
-	switch (choice) {
-	case PRINT_PATIENT:
-		printPatient(p);
-		break;
-	case EDIT_PATIENT:
-		editPatient(p);
-		break;
-	}
+	do {
+		printf("\n\n(1). Print my details.\n(2). Edit my profit\n(3).Return to main menu\n");
+		scanf("%d", &choice);
+		switch (choice) {
+		case PRINT_PATIENT:
+			printPatient(p);
+			break;
+		case EDIT_PATIENT:
+			editPatient(p);
+			break;
+		case GO_BACK:
+			printf("Returnning to main menu..\n");
+			break;
 
+		}
+	} while (choice != GO_BACK);
 
 }
 
@@ -196,12 +203,13 @@ void editPatient(Patient* p) {
 	}
 
 }
-
+/*Searches patient in file, once found points file pointer 1 struct back
+and returns 1, else returns 0. */
 search_patient_to_modify(const Patient* p, FILE* fp) {
 	Patient temp_P;
 	while (fread(&temp_P, sizeof(Patient), 1, fp)) {
 		if (!strcmp(p->un, temp_P.un)) {
-			fseek(fp, -TOTAL_SIZE_P, SEEK_CUR);
+			fseek(fp, -(int)sizeof(Patient), SEEK_CUR);
 			return 1;//user found
 		}
 	}
