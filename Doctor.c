@@ -245,7 +245,7 @@ void doctor_Menu(Doctor* d) {
 			editDoctor(d);
 			break;
 		case VIEW_APPOINTMENTS:
-		/*	print_doctor_schedule(d);*/
+			display_schedule(d);
 			break;
 		case GO_BACK:
 			printf("Good bye Dr. %s !\n Signing out..\n",d->name);
@@ -282,12 +282,14 @@ int init_schedule(Doctor* d) {
 			strcpy(d->sched.days[i].ID[j], DEFAULT_ID);
 		}
 	}
-	printf("Enter which days can you work in.\n Do not repeat days. to exit enter 7");
+	printf("Enter which days can you work in.\n Do not repeat days. TO EXIT ENTER 7 \n");
 	printf("(1).Sunday\n(2).Monday\n(3).Tuesday\n(4).Wednsday\n(5).Thursday\n(6).Friday\n");
 	do {//loop that makes the day available
 		scanf("%d", &choice);
-		d->sched.available[choice] = 1;//activating availability
-		d->sched.days[choice].counter = 0;
+		if (choice == 7)
+			break;
+		d->sched.available[choice-1] = 1;//activating availability
+		d->sched.days[choice-1].counter = 0;
 	} while (choice != 7);
 	printf("Schedule initiated.\n");
 	return 1;//success
@@ -304,15 +306,38 @@ int check_availability(schedule d_schedule,int day) {
 
 //prints schedule
 void display_schedule(const Doctor* d) {
+	enum{SUNDAY,MONDAY,TUESDAY,WEDNSDAY,THURSDAY,FRIDAY};
+	char* time_array[MAX_APPOINTMENTS] = { "08:00","09:00","10:00","11:00","12:00","13:00","14:00","15:00" };
 	int i = 0;
+	printf("\n	-------------------------------------------------------\n");
 	do {
 		if (d->sched.available[i] == 0) {
 			i++;
 			continue;
 		}
+		switch (i) {
+		case SUNDAY:
+			printf("			****Sunday****:\n");
+			break;
+		case MONDAY:
+			printf("			****Monday****:\n");
+			break;
+		case TUESDAY:
+			printf("			****Tuesday****:\n");
+			break;
+		case WEDNSDAY:
+			printf("			****Wednsday****:\n");
+			break;
+		case THURSDAY:
+			printf("			****Thursday****:\n");
+			break;
+		case FRIDAY:
+			printf("			****Friday****:\n");
+			break;
+		}
 		for (int j = 0; j < MAX_APPOINTMENTS; j++)
-			printf("Appointment %d:patient ID: %s	", j + 1, d->sched.days[i].ID[j]);
-		printf("Day number %d\n", i);
+			printf("%s Appointment %d:patient ID: %s	\n",time_array[j], j + 1, d->sched.days[i].ID[j]);
+		printf("\n	-------------------------------------------------------\n");
 		i++;
 	} while (i < DAYS_IN_WEEK);
 }
