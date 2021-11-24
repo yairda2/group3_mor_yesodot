@@ -4,9 +4,24 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#define TOTAL_SIZE 350//size of doctor
 #define DOCTOR_FILE "DoctorData.bin"
+#define DEFAULT_ID "0"
+#define MAX_APPOINTMENTS 8
+#define DAYS_IN_WEEK 6
 #define SIZE 50//size of normal string.
+
+
+typedef struct {
+	char ID[MAX_APPOINTMENTS][SIZE];//2 dim array of 8 appointments, saved by ID's. 
+	int counter;//represents appointments in a day 
+}day;
+
+typedef struct {
+	day days[DAYS_IN_WEEK];//6 days struct.
+	int available[DAYS_IN_WEEK];//array of 1's, when a doctor is fully booked we set the day to 0.
+}schedule;
+
+
 struct Doctor { //Doctors struct 
 	char un[SIZE];//user
 	char pass[SIZE];//pass
@@ -15,10 +30,12 @@ struct Doctor { //Doctors struct
 	char last_n[SIZE];//last
 	char specialty[SIZE];//specialty
 	char gender[SIZE];//gender
-
+	schedule sched;//doctor schedule
 }typedef Doctor;
 
-//functions 
+
+
+//functions for doctor 
 
 int initiateDoctor(Doctor* d);//creating doctor struct, returns pointer to struct created.
 int registerDoctor(Doctor* d);// registering a doctor returns 1 if successufuly registed.
@@ -32,18 +49,9 @@ void editDoctor(Doctor* d);//Edits detail of doctor.
 
 
 
+int init_schedule(Doctor* d);//returns initiated schedule
 
-
-
-
-
-
-
-
-
-
-
-
-
+int check_availability(schedule d_schedule,int day);//returns 1 if day is available.
+void display_schedule(const Doctor* d);
 
 #endif;

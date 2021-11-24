@@ -51,6 +51,7 @@ int initiateDoctor(Doctor* d) {
 		scanf("%s", d->specialty);
 		printf("Please enter gender:\n");//gender
 		scanf("%s", d->gender);
+		if(init_schedule(d))
 		return 1;//success
 
 }
@@ -234,7 +235,7 @@ void doctor_Menu(Doctor* d) {
 	int choice;
 	printf("Hello dr.%s %s!\n\nWhat would you like to do ?", d->name, d->last_n);
 	do {
-	printf("\n\n(1).Look at my info.\n(2). Edit info\n(3).Sign out\n");
+	printf("\n\n(1). Look at my info.\n(2). Edit info\n(3). View appointments\n(4).Go back\n");
 	scanf("%d", &choice);
 		switch (choice) {
 		case PRINT_DOCTOR:
@@ -244,7 +245,8 @@ void doctor_Menu(Doctor* d) {
 			editDoctor(d);
 			break;
 		case VIEW_APPOINTMENTS:
-
+		/*	print_doctor_schedule(d);*/
+			break;
 		case GO_BACK:
 			printf("Good bye Dr. %s !\n Signing out..\n",d->name);
 			break;
@@ -268,3 +270,90 @@ int search_doctor_to_modify(const Doctor* d, FILE* fp) {
 	}
 	return 0;//failed to find username.
 }
+
+
+/*inits a schedule, sets availability array in the day where the doctor wishes to work to 1.*/
+int init_schedule(Doctor* d) {
+	int	counter=0,choice;//number of days doctor can work.
+	int minutes; int hours;
+	for (int i = 0; i < DAYS_IN_WEEK; i++) {//initiating avialability to unavialable
+		d->sched.available[i] = 0;//default unavailable
+		for (int j = 0; j < MAX_APPOINTMENTS; j++) {//setting IDs in schedule to 000000000
+			strcpy(d->sched.days[i].ID[j], DEFAULT_ID);
+		}
+	}
+	printf("Enter which days can you work in.\n Do not repeat days. to exit enter 7");
+	printf("(1).Sunday\n(2).Monday\n(3).Tuesday\n(4).Wednsday\n(5).Thursday\n(6).Friday\n");
+	do {//loop that makes the day available
+		scanf("%d", &choice);
+		d->sched.available[choice] = 1;//activating availability
+		d->sched.days[choice].counter = 0;
+	} while (choice != 7);
+	printf("Schedule initiated.\n");
+	return 1;//success
+
+}
+
+
+//checks if doctors day is available.
+int check_availability(schedule d_schedule,int day) {
+	if (d_schedule.available[day] == 1 && d_schedule.days[day].counter != MAX_APPOINTMENTS )//if day is not full and available returns 1.
+		return 1;
+	return 0;
+}
+
+//prints schedule
+void display_schedule(const Doctor* d) {
+	int i = 0;
+	do {
+		if (d->sched.available[i] == 0) {
+			i++;
+			continue;
+		}
+		for (int j = 0; j < MAX_APPOINTMENTS; j++)
+			printf("Appointment %d:patient ID: %s	", j + 1, d->sched.days[i].ID[j]);
+		printf("Day number %d\n", i);
+		i++;
+	} while (i < DAYS_IN_WEEK);
+}
+
+//void print_doctor_schedule(Doctor* d) {
+//	enum{PRINT=1,EDIT_SCHEDULE=2,GO_BACK=3};
+//	int choice;
+//	printf("----- SCHEDULE ------\n"
+//		""
+//		"(1). Print my schedule\n"
+//		"(2). Edit schedule\n"
+//		"(3). Go back\n");
+//	scanf("%d", &choice);
+//	switch (choice) {
+//	case PRINT:
+//		print_appointments();
+//		break;
+//	case EDIT_SCHEDULE:
+//		edit_schedule(d);
+//		break;
+//	case GO_BACK:
+//		printf("Going back\n");
+//		return;
+//	default:
+//		printf("Wrong input\n");
+//	}
+//}
+//
+//int edit_schedule(Doctor* d) {
+//	int choice;
+//	enum{ADD=1,REMOVE=2};
+//	printf("What would you like to do ?\n"
+//		"(1). Add working days\n"
+//		"(2). Remove working days\n");
+//	scanf("%d", &choice);
+//	switch (choice) {
+//	case ADD:
+//		add_to_schedule();
+//		return 1;
+//	case REMOVE:
+//		remove_from_schedule();
+//		return 1;
+//	}
+//}

@@ -388,7 +388,7 @@
 //		{
 //			break;
 //		}
-//	defulte:
+//		default:
 //		{
 //			printf("unvalid input please try again");
 //			break;

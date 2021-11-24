@@ -11,8 +11,7 @@ int flush_database();
 
 
 
-int main() { 
-
+int main() {
 	Menu();
 	return 0;
 }
@@ -142,3 +141,4 @@ int flush_database() {
 	fclose(fp);
 	return 1;
 }
+

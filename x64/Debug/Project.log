@@ -1,4 +1,2 @@
-﻿  Doctor.c
-C:\Users\valer\source\repos\group3_mor_yesodot\Doctor.c(62,1): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\valer\source\repos\group3_mor_yesodot\Doctor.c(78,1): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+﻿  main.c
   Project.vcxproj -> C:\Users\valer\source\repos\group3_mor_yesodot\x64\Debug\Project.exe
