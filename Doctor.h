@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 #define DOCTOR_FILE "DoctorData.bin"
-#define DEFAULT_ID "0"
+#define DEFAULT_ID ""
 #define MAX_APPOINTMENTS 8
 #define DAYS_IN_WEEK 6
 #define SIZE 50//size of normal string.
@@ -49,6 +49,8 @@ void editDoctor(Doctor* d);//Edits detail of doctor.
 
 
 
+
+//schedule functions :
 int init_schedule(Doctor* d);//returns initiated schedule
 
 int check_availability(schedule d_schedule,int day);//returns 1 if day is available.

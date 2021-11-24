@@ -1,7 +1,6 @@
-﻿  Doctor.c
-C:\Users\valer\source\repos\group3_mor_yesodot\Doctor.c(63,1): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\valer\source\repos\group3_mor_yesodot\Doctor.c(79,1): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\valer\source\repos\group3_mor_yesodot\Doctor.c(278,6): warning C4101: 'minutes': unreferenced local variable
-C:\Users\valer\source\repos\group3_mor_yesodot\Doctor.c(278,19): warning C4101: 'hours': unreferenced local variable
-C:\Users\valer\source\repos\group3_mor_yesodot\Doctor.c(57): warning C4715: 'initiateDoctor': not all control paths return a value
+﻿  Patient.c
+C:\Users\valer\source\repos\group3_mor_yesodot\Patient.c(88,1): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  main.c
+  Generating Code...
+C:\Users\valer\source\repos\group3_mor_yesodot\Patient.c(230): warning C4716: 'init_appointments': must return a value
   Project.vcxproj -> C:\Users\valer\source\repos\group3_mor_yesodot\x64\Debug\Project.exe

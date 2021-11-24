@@ -309,6 +309,7 @@ void display_schedule(const Doctor* d) {
 	enum{SUNDAY,MONDAY,TUESDAY,WEDNSDAY,THURSDAY,FRIDAY};
 	char* time_array[MAX_APPOINTMENTS] = { "08:00","09:00","10:00","11:00","12:00","13:00","14:00","15:00" };
 	int i = 0;
+	printf("%s Schedule for this week:\n", d->name);
 	printf("\n	-------------------------------------------------------\n");
 	do {
 		if (d->sched.available[i] == 0) {
