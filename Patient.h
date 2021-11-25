@@ -42,4 +42,5 @@ void editPatient(Patient* p);
 
 int init_appointments(Patient* p);
 void display_appointments(const Patient* p);
+int schedule_appointment(Patient* p);
 #endif;

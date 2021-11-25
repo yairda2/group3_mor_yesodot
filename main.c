@@ -1,12 +1,15 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include "Doctor.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include "Patient.h"
 void Menu();//Prints main menu
 void registerMenu();//Prints register menu
 void sign_in_Menu();//Prints sign in menu
 void patient_Menu(Patient* p);//Prints patient menu
 int flush_database();
+int schedule_appointment(Patient* p);//schedule appointment
+#define MAX_DOCTORS 10
 //check if IDs between doctor and patient are same
 
 
@@ -141,4 +144,68 @@ int flush_database() {
 	fclose(fp);
 	return 1;
 }
+/*schedule an appointment.*/
+int schedule_appointment(Patient* p) {
+	FILE* fp_d = fopen(DOCTOR_FILE, "rb+");//open file to write/read
+	FILE* fp_p = fopen(PATIENT_FILE, "rb+");//open file to write/read
+	int i = 0, choice;
+	char temp[SIZE];
+	int flag = 0;
+	Doctor d_array[MAX_DOCTORS];//helper
+	if (!fp_d) {//file failure.
+		printf("File could not open\n");
+		exit(1);
+	}
+	if (!fp_d) {//file failure.
+		printf("File could not open\n");
+		exit(1);
+	}
+	puts("Hello ! which doctor from the list would you like to appoint to ?\n");
+	puts("Pick a doctor from the list, once you've picked a doctor his days of availability and appointments avaialable will pop up");
+	while (fread(&d_array[i], sizeof(Doctor), 1, fp_d)) {//while not at end of file read 
+		printf("(%d). Dr. %s %s Speciality : %s \n", i + 1, d_array[i].name, d_array[i].last_n, d_array[i].specialty);//displaying doctor by name and speciality.
+		i++;
+	}
+	scanf("%d", &choice);
+	display_schedule(&d_array[choice - 1]);//display schedule
+	do {
+		puts("Enter the day you want.");
+		scanf("%d", &i);//day input
+		if (i > 6 || i < 1)
+			puts("Invalid input, please try again.");
+	} while (i > 6 || i < 1);
+		if (d_array[choice - 1].sched.days[i-1].counter != MAX_APPOINTMENTS) {//checking  if doctor day is not full
+			puts("Enter time you want for the day. e.g [HH:MM]");
+			scanf("%s", temp);
+			for (int j = 0; j < MAX_APPOINTMENTS; j++) {
+				if (!(strcmp(temp, d_array[choice - 1].sched.days[i-1].time_array[j])) && !(strcmp(d_array[choice - 1].sched.days[i-1].ID[j], DEFAULT_ID)) && p->counter != MAX_APPOINTMENTS) {//checking if time matches and if appointment is not taken
+					strcpy(d_array[choice - 1].sched.days[i-1].ID[j], p->ID);//copying patient ID
+					d_array[choice - 1].sched.days[i-1].counter++;//adding to appointments that day.
+					fseek(fp_d, 0, SEEK_SET);//setting pointer to start of file
+					if (search_doctor_to_modify(&d_array, fp_d)) {//if doctor found goes in
+						for (int k = 0; k < MAX_APPOINTMENTS; k++) {
+							if (p->appointments[k].flag) {//if patient is free that day.copying description
+								puts("Enter description for appointment.");
+								getchar();//get enter 
+								gets(p->appointments[k].desc);//get description for patient
+								strcat(p->appointments[k].desc, " ");//blankspace
+								strcat(p->appointments[k].desc, d_array->sched.days[i-1].time_array[j]);//copying time from doctor description.
+								p->appointments[k].flag = 0;//appointment is taken
+								if (search_patient_to_modify(p, fp_p)) {//searches patient.
+									fwrite(p, sizeof(Patient), 1, fp_p);//writes to patient
+									fclose(fp_p);
+									fwrite(&d_array[choice - 1], sizeof(Doctor), 1, fp_d);//writing doctor to file.
+									fclose(fp_d);
+									return 1;
+								}
 
+							}
+						}
+					}
+
+				}
+			}
+		}
+		puts("Something went wrong, please try rescheduling.");
+
+}

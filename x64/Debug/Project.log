@@ -1,6 +1,6 @@
-﻿  Patient.c
-C:\Users\valer\source\repos\group3_mor_yesodot\Patient.c(88,1): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-  main.c
-  Generating Code...
-C:\Users\valer\source\repos\group3_mor_yesodot\Patient.c(230): warning C4716: 'init_appointments': must return a value
+﻿  main.c
+C:\Users\valer\source\repos\group3_mor_yesodot\main.c(185,42): warning C4047: 'function': 'const Doctor *' differs in levels of indirection from 'Doctor (*)[10]'
+C:\Users\valer\source\repos\group3_mor_yesodot\main.c(185,42): warning C4024: 'search_doctor_to_modify': different types for formal and actual parameter 1
+C:\Users\valer\source\repos\group3_mor_yesodot\main.c(190,13): warning C4013: 'gets' undefined; assuming extern returning int
+C:\Users\valer\source\repos\group3_mor_yesodot\main.c(211): warning C4715: 'schedule_appointment': not all control paths return a value
   Project.vcxproj -> C:\Users\valer\source\repos\group3_mor_yesodot\x64\Debug\Project.exe

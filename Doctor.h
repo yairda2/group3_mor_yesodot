@@ -8,11 +8,13 @@
 #define DEFAULT_ID ""
 #define MAX_APPOINTMENTS 8
 #define DAYS_IN_WEEK 6
+#define APPOINTMENT_HOURS 6
 #define SIZE 50//size of normal string.
 
 
 typedef struct {
-	char ID[MAX_APPOINTMENTS][SIZE];//2 dim array of 8 appointments, saved by ID's. 
+	char ID[MAX_APPOINTMENTS][SIZE];//2 dim array of 8 appointments, saved by ID's.
+	char time_array[MAX_APPOINTMENTS][DAYS_IN_WEEK];
 	int counter;//represents appointments in a day 
 }day;
 

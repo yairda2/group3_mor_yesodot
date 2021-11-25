@@ -275,11 +275,12 @@ int search_doctor_to_modify(const Doctor* d, FILE* fp) {
 /*inits a schedule, sets availability array in the day where the doctor wishes to work to 1.*/
 int init_schedule(Doctor* d) {
 	int	counter=0,choice;//number of days doctor can work.
-	int minutes; int hours;
+	char* time_array[MAX_APPOINTMENTS] = { "08:00","09:00","10:00","11:00","12:00","13:00","14:00","15:00" };
 	for (int i = 0; i < DAYS_IN_WEEK; i++) {//initiating avialability to unavialable
 		d->sched.available[i] = 0;//default unavailable
 		for (int j = 0; j < MAX_APPOINTMENTS; j++) {//setting IDs in schedule to 000000000
 			strcpy(d->sched.days[i].ID[j], DEFAULT_ID);
+			strcpy(d->sched.days[i].time_array[j], time_array[j]);
 		}
 	}
 	printf("Enter which days can you work in.\n Do not repeat days. TO EXIT ENTER 7 \n");
@@ -307,7 +308,6 @@ int check_availability(schedule d_schedule,int day) {
 //prints schedule
 void display_schedule(const Doctor* d) {
 	enum{SUNDAY,MONDAY,TUESDAY,WEDNSDAY,THURSDAY,FRIDAY};
-	char* time_array[MAX_APPOINTMENTS] = { "08:00","09:00","10:00","11:00","12:00","13:00","14:00","15:00" };
 	int i = 0;
 	printf("%s Schedule for this week:\n", d->name);
 	printf("\n	-------------------------------------------------------\n");
@@ -337,7 +337,7 @@ void display_schedule(const Doctor* d) {
 			break;
 		}
 		for (int j = 0; j < MAX_APPOINTMENTS; j++)
-			printf("%s Appointment %d:patient ID: %s	\n",time_array[j], j + 1, d->sched.days[i].ID[j]);
+			printf("%s Appointment %d:patient ID: %s	\n",d->sched.days[i].time_array[j], j + 1, d->sched.days[i].ID[j]);
 		printf("\n	-------------------------------------------------------\n");
 		i++;
 	} while (i < DAYS_IN_WEEK);

@@ -109,10 +109,10 @@ Prints patient menu,uses printPatient/editPatient functions.
 */
 void patient_Menu(Patient* p) {
 	int choice;
-	enum patient_menu { PRINT_PATIENT = 1, EDIT_PATIENT = 2,DISPLAY=3,GO_BACK=4 };
+	enum patient_menu { PRINT_PATIENT = 1, EDIT_PATIENT = 2,DISPLAY=3,BOOK_APPOINTMENT=4,GO_BACK=5 };
 	printf("Hello %s %s, How can we help you today?\n",p->name,p->last_n);
 	do {
-		printf("\n\n(1). Print my details.\n(2). Edit my profit\n(3). Display appointments\n(4).Return to main menu\n");
+		printf("\n\n(1). Print my details.\n(2). Edit my profit\n(3). Display appointments\n(4). Book appointment\n(5).Return to main menu\n");
 		scanf("%d", &choice);
 		switch (choice) {
 		case PRINT_PATIENT:
@@ -124,6 +124,8 @@ void patient_Menu(Patient* p) {
 		case DISPLAY:
 			display_appointments(p);
 			break;
+		case BOOK_APPOINTMENT:
+			schedule_appointment(p);
 		case GO_BACK:
 			printf("Returnning to main menu..\n");
 			break;
@@ -221,17 +223,17 @@ search_patient_to_modify(const Patient* p, FILE* fp) {
 	return 0;//failed to find username.
 }
 
-
+//inits appointments array for patient
 int init_appointments(Patient* p) {
 	for (int i = 0; i < MAX_APPOINTMENTS; i++) {
 		strcpy(p->appointments[i].desc, DEFAULT_NAME);//initiating array of appointments.
 		p->appointments[i].flag = 1;
 	}
 }
-
+//prints patient appointments.
 void display_appointments(const Patient* p) {
 	for (int i = 0; i < MAX_APPOINTMENTS; i++) {
-		if (p->appointments[i].flag == 0)
+		if (p->appointments[i].flag == 1)//if he doesn't have an apppointment scheduled. 
 			continue;
 		printf("Appointment %d: %s\n", i + 1, p->appointments[i].desc);
 	}
