@@ -1,6 +1,7 @@
 #pragma once
 #ifndef PATIENT_H
 #define PATIENT_H
+#include "Colors.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -12,8 +13,10 @@
 #define SIZE 50
 
 typedef struct {
-	int flag;//mark appointments if equal to 0 appointment already has an appointment
+	int flag;//mark appointments if equal to 0 patient already has an appointment
 	char desc[DESCRIPTION];//description for meeting..
+	char d_name[SIZE];
+	//Sunday HH:MM "dr.Name description
 }appointment;
 
 struct Patient { //Doctors struct 
@@ -43,4 +46,5 @@ void editPatient(Patient* p);
 int init_appointments(Patient* p);
 void display_appointments(const Patient* p);
 int schedule_appointment(Patient* p);
+int edit_appointment(Patient* p);
 #endif;

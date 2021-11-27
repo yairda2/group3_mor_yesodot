@@ -6,29 +6,31 @@ int initiatePatient(Patient* p) {
 	system("cls");
 	p->counter = 0;//initiating appointments.
 	int flagU = 0, flagP = 0, tries = 3;//validation of username and password
-	printf("Enter patient info:\n");
+	printf(BOLDBLUE"				****Patient registration****\n\nEnter info[After 3 tries you will be redirected to main menu]:\n"RESET);
+	printf(BOLDCYAN"Enter patient info:\n"RESET);
 	do {
 		if (tries == 0) {//tries to sign up.
 			return 0;
 		}
+		printf(BOLDRED"try number %d\n"RESET, tries);
 		tries--;
-		printf("Please enter username:\n");//user
+		printf(BOLDCYAN"Please enter username:\n"RESET);//user
 		scanf("%s", p->un);
 		flagU = user_validation_P(p->un);
 		if (!flagU) {
 			continue;
 		}
-		printf("Please enter password:\n");
+		printf(BOLDCYAN"Please enter password:\n"RESET);
 		scanf("%s", p->pass);
 		flagP = password_validation(p->pass);
 	} while (!(flagU && flagP));
-	printf("Please enter ID:\n");//id
+	printf(BOLDCYAN"Please enter ID:\n"RESET);//id
 	scanf("%s", p->ID);
-	printf("Please enter name:\n");//name
+	printf(BOLDCYAN"Please enter name:\n"RESET);//name
 	scanf("%s", p->name);
-	printf("Please enter last name:\n");//last name
+	printf(BOLDCYAN"Please enter last name:\n"RESET);//last name
 	scanf("%s", p->last_n);
-	printf("Please enter gender:\n");//gender
+	printf(BOLDCYAN"Please enter gender:\n"RESET);//gender
 	scanf("%s", p->gender);
 	init_appointments(p);
 	return 1;
@@ -37,7 +39,7 @@ int initiatePatient(Patient* p) {
 
 /*Prints patient*/
 void printPatient(const Patient* p) {
-	printf("Patient's info :\nID: %s\nUsername: %s\nPassword: %s\nFull name: %s %s\nGender: %s\n", p->ID, p->un, p->pass, p->name, p->last_n, p->gender);
+	printf(BOLDYELLOW"Patient's info :\nID: %s\nUsername: %s\nPassword: %s\nFull name: %s %s\nGender: %s\n"RESET, p->ID, p->un, p->pass, p->name, p->last_n, p->gender);
 }
 
 
@@ -45,9 +47,9 @@ void printPatient(const Patient* p) {
 /*Registers a patient to patients database file
 storing in text file by the size of patient struct. */
 int registerPatient(const Patient* p) {
-	FILE* fp = fopen("PatientData.bin", "rb+");
+	FILE* fp = fopen(PATIENT_FILE, "rb+");
 	if (!fp) {
-		perror("Cannot open file");
+		perror(BOLDRED"Cannot open file"RESET);
 		exit(1);
 	}
 	fwrite(p, sizeof(Patient), 1, fp);//writes patient to database.
@@ -61,18 +63,18 @@ Patient* sign_inP(Patient* p) {
 	system("cls");
 	char user[SIZE];
 	char pass[SIZE];
-	printf("Please enter user name:[5-20 LENGTH, NUMBERS AND SIGNS ARE NOT ALLOWED]\n");
+	printf(BOLDCYAN"Please enter user name:[5-20 LENGTH, NUMBERS AND SIGNS ARE NOT ALLOWED]\n"RESET);
 	scanf("%s", user);
-	printf("Please enter password:\n");
+	printf(BOLDCYAN"Please enter password:\n"RESET);
 	scanf("%s", pass);
 	if (!p) {
-		printf("Patient could not be allocated\n");
+		printf(BOLDRED"Patient could not be allocated\n"RESET);
 		return NULL;
 	}
 	FILE* fp = fopen("PatientData.bin", "rb");//opens patient database with read binary mode
 	if (!fp) {
-		perror("Cannot open file");
-		return NULL;
+		perror(BOLDRED"Cannot open file"RESET);
+		exit(1);
 	}
 	while (fread(p, sizeof(Patient), 1, fp)) {//reads structrs of patients untill reached eof.
 		if (!strcmp(p->un, user) && !strcmp(p->pass, pass))//checking match
@@ -83,14 +85,14 @@ Patient* sign_inP(Patient* p) {
 
 /*user validation - returns 1 if user is validated, else returns 0. */
 int user_validation_P(const char* user_n) {
-	FILE* fp = fopen("PatientData.bin", "rb");
+	FILE* fp = fopen(PATIENT_FILE, "rb");
 	Patient p_test;
 	int len = strlen(user_n);
 	if (len >= 5 && len <= 20) {
 		for (int i = 0; i < len; i++) {
 			if ((user_n[i] >= 65 && user_n[i] <= 90) || (user_n[i] >= 97 && user_n[i] <= 122))
 				continue;
-			printf("Cannot validate user.\n");
+			printf(BOLDRED"Cannot validate user.\n"RESET);
 			return 0;
 		}
 	}
@@ -99,7 +101,7 @@ int user_validation_P(const char* user_n) {
 	while (fread(&p_test, sizeof(Patient), 1, fp))//continue validation
 		if (!strcmp(p_test.un, user_n))
 			return 0;
-	printf("User validated.\n");//else
+	printf(BOLDGREEN"User validated.\n"RESET);//else
 	fclose(fp);
 	return 1;
 }
@@ -109,11 +111,13 @@ Prints patient menu,uses printPatient/editPatient functions.
 */
 void patient_Menu(Patient* p) {
 	int choice;
-	enum patient_menu { PRINT_PATIENT = 1, EDIT_PATIENT = 2,DISPLAY=3,BOOK_APPOINTMENT=4,GO_BACK=5 };
-	printf("Hello %s %s, How can we help you today?\n",p->name,p->last_n);
+	char c;//continue
+	enum patient_menu { PRINT_PATIENT = 1, EDIT_PATIENT = 2,DISPLAY=3,BOOK_APPOINTMENT=4,EDIT_APPOINTMENT=5,GO_BACK=6 };
+	printf(BOLDCYAN"Hello %s %s, How can we help you today?\n",p->name,p->last_n);
 	do {
-		printf("\n\n(1). Print my details.\n(2). Edit my profit\n(3). Display appointments\n(4). Book appointment\n(5).Return to main menu\n");
+		printf(BOLDYELLOW"\n\n(1). Print my details.\n(2). Edit my profit\n(3). Display appointments\n(4). Book appointment\n(5).Edit appointment\n(6).Return to main menu\n"RESET);
 		scanf("%d", &choice);
+		getchar();
 		switch (choice) {
 		case PRINT_PATIENT:
 			printPatient(p);
@@ -125,9 +129,18 @@ void patient_Menu(Patient* p) {
 			display_appointments(p);
 			break;
 		case BOOK_APPOINTMENT:
-			schedule_appointment(p);
+			if (schedule_appointment(p))
+				puts("Appointment booked");
+			break;
+		case EDIT_APPOINTMENT:
+			if (edit_appointment(p))
+				puts("Appointment successfuly added");
 		case GO_BACK:
-			printf("Returnning to main menu..\n");
+			printf(BOLDCYAN"Returnning to main menu..\n"RESET);
+			printf("Please enter any key to continue..\n");
+			scanf("%c", &c);
+			system("cls");
+			
 			break;
 
 		}
@@ -138,14 +151,18 @@ void patient_Menu(Patient* p) {
 void editPatient(Patient* p) {
 	int choice,flag=0;
 	char temp[SIZE];
-	FILE* fp = fopen("PatientData.bin", "rb+");
+	FILE* fp = fopen(PATIENT_FILE, "rb+");
+	if (!fp) {
+		perror(BOLDRED"Cannot open file\n"RESET);
+		exit(1);
+	}
 	enum edit_menu { NAME = 1, LAST_NAME = 2, ID = 3, PASSWORD = 4, GO_BACK = 5 };
-	printf("What would you like to change ?\n");
-	printf("(1). Name\n(2). Last name\n(3). ID\n(4). Password\n(5). Go back to main menu");
+	printf(BOLDCYAN"What would you like to change ?\n"RESET);
+	printf(BOLDYELLOW"(1). Name\n(2). Last name\n(3). ID\n(4). Password\n(5). Go back to main menu"RESET);
 	scanf("%d", &choice);
 	switch (choice) {
 	case NAME:
-		printf("Please enter new name:\n");
+		printf(BOLDCYAN"Please enter new name:\n"RESET);
 		scanf("%s", temp);
 		if (search_patient_to_modify(p,fp)) {
 			strcpy(p->name, temp);
@@ -154,12 +171,12 @@ void editPatient(Patient* p) {
 			flag++;
 		}
 		if (flag)
-			printf("Name was changed.\n");
+			printf(BOLDGREEN"Name was changed.\n"RESET);
 		else
-			printf("Something went wrong");
+			printf(BOLDRED"Something went wrong"RESET);
 		break;
 	case LAST_NAME:
-		printf("Please enter new last name:\n");
+		printf(BOLDCYAN"Please enter new last name:\n"RESET);
 		scanf("%s", temp);
 		if (search_patient_to_modify(p, fp)) {
 			strcpy(p->last_n, temp);
@@ -168,12 +185,12 @@ void editPatient(Patient* p) {
 			fclose(fp);
 		}
 		if (flag)
-			printf("Last name was changed.\n");
+			printf(BOLDGREEN"Last name was changed.\n"RESET);
 		else
-			printf("Something went wrong");
+			printf(BOLDRED"Something went wrong"RESET);
 		break;
 	case ID:
-		printf("Please enter ID:\n");
+		printf(BOLDCYAN"Please enter ID:\n"RESET);
 		scanf("%s", temp);
 		if (search_patient_to_modify(p, fp)) {
 			strcpy(p->ID, temp);
@@ -182,12 +199,12 @@ void editPatient(Patient* p) {
 			fclose(fp);
 		}
 		if (flag)
-			printf("ID was changed.\n");
+			printf(BOLDGREEN"ID was changed.\n"RESET);
 		else
-			printf("Something went wrong");
+			printf(BOLDRED"Something went wrong"RESET);
 		break;
 	case PASSWORD:
-		printf("Please enter new password:\n");
+		printf(BOLDCYAN"Please enter new password:\n"RESET);
 		scanf("%s", temp);
 		if (password_validation(temp))
 			if (search_patient_to_modify(p, fp)) {
@@ -197,16 +214,16 @@ void editPatient(Patient* p) {
 				fclose(fp);
 			}
 		if (flag)
-			printf("password was changed.\n");
+			printf(BOLDGREEN"password was changed.\n"RESET);
 		else {
-			printf("Something went wrong");
+			printf(BOLDRED"Something went wrong"RESET);
 			fclose(fp);
 		}
 		break;
 	case GO_BACK:
 			return;
 	default:
-		printf("You have entered a wrong choice. Redirecting to patient menu.\n");
+		printf(BOLDRED"You have entered a wrong choice. Redirecting to patient menu.\n"RESET);
 	}
 
 }
@@ -228,13 +245,20 @@ int init_appointments(Patient* p) {
 	for (int i = 0; i < MAX_APPOINTMENTS; i++) {
 		strcpy(p->appointments[i].desc, DEFAULT_NAME);//initiating array of appointments.
 		p->appointments[i].flag = 1;
+		strcpy(p->appointments[i].d_name, DEFAULT_NAME);
 	}
 }
 //prints patient appointments.
 void display_appointments(const Patient* p) {
+	int j = 0;
+	puts(BOLDBLUE"			****Scehdule****"BOLDCYAN);
 	for (int i = 0; i < MAX_APPOINTMENTS; i++) {
 		if (p->appointments[i].flag == 1)//if he doesn't have an apppointment scheduled. 
 			continue;
-		printf("Appointment %d: %s\n", i + 1, p->appointments[i].desc);
+		printf("Appointment %d to Dr.%s on : %s\n", j+1,p->appointments[i].d_name, p->appointments[i].desc);
+		j++;
 	}
+	printf(RESET);
 }
+
+

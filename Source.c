@@ -28,7 +28,7 @@
 //#define NUN_MEET 2
 //#define NAME 10
 //#define I 8
-//#define enum days { Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday };
+//#define enum days { Sunday, Monday, Tuesday, , Thursday, Friday, Saturday };
 //
 //
 //void print_Start_Menu() //the first main log-in

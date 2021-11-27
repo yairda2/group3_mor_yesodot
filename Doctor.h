@@ -1,14 +1,16 @@
 #pragma once
 #ifndef DOCTOR_H
 #define DOCTOR_H
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 #define DOCTOR_FILE "DoctorData.bin"
 #define DEFAULT_ID ""
 #define MAX_APPOINTMENTS 8
 #define DAYS_IN_WEEK 6
 #define APPOINTMENT_HOURS 6
+#define SIZE_FOR_DAY 10
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include "Colors.h"
 #define SIZE 50//size of normal string.
 
 
