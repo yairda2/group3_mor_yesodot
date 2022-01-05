@@ -1,6 +1,6 @@
 # group3_mor_yesodot
 Group 3 Doctor's appointments system:
-a system where patients can schedule appointments independtenly according to a doctor's schedule.
+a system where patients can schedule appointments dependtenly according to a doctor's schedule.
 A doctor user can view his daily/weekly schedule according to appointments set by the patients.
 
 
